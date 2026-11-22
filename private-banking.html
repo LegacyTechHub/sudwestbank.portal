@@ -1,0 +1,199 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Private Banking der SÜDWESTBANK: Persönliche Vermögensbetreuung, Wertpapierdepots, Finanzierung und Nachfolgeplanung.">
+  <title>Private Banking | SÜDWESTBANK</title>
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    .private-banking-hero {
+      background:
+        linear-gradient(90deg, rgba(255,255,255,.94) 0%, rgba(255,255,255,.76) 48%, rgba(255,255,255,.12) 100%),
+        url("https://images.unsplash.com/photo-1556761175-b413da4baf72?auto=format&fit=crop&w=1800&q=85") center/cover;
+    }
+    .private-advisor-image {
+      background-image: url("https://images.unsplash.com/photo-1556761175-5973dc0f32e7?auto=format&fit=crop&w=1100&q=82");
+    }
+    .private-portfolio-image {
+      background-image: url("https://images.unsplash.com/photo-1554224155-8d04cb21cd6c?auto=format&fit=crop&w=1100&q=82");
+    }
+    .private-finance-image {
+      background-image: url("https://images.unsplash.com/photo-1560518883-ce09059eeffa?auto=format&fit=crop&w=1100&q=82");
+    }
+    .private-family-image {
+      background-image: url("https://images.unsplash.com/photo-1529156069898-49953e39b3ac?auto=format&fit=crop&w=1100&q=82");
+    }
+    .private-foundation-image {
+      background-image: url("https://images.unsplash.com/photo-1450101499163-c8848c66ca85?auto=format&fit=crop&w=1100&q=82");
+    }
+    .regional-advisor-strip {
+      padding: 58px 0 64px;
+      background: #ffffff;
+      border-top: 1px solid #dce1e6;
+    }
+    .regional-advisor-strip h2 {
+      margin: 0 0 10px;
+      color: #005a8c;
+      font-size: clamp(30px, 3vw, 40px);
+    }
+    .regional-advisor-strip > .container > p:not(.section-kicker) {
+      margin: 0 0 24px;
+      color: #333333;
+    }
+    .location-list {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      margin: 0;
+      padding: 0;
+      list-style: none;
+      border-top: 1px solid #dce1e6;
+      border-bottom: 1px solid #dce1e6;
+    }
+    .location-list li { border-right: 1px solid #dce1e6; }
+    .location-list li:last-child { border-right: 0; }
+    .location-list a {
+      display: block;
+      padding: 18px 12px;
+      color: #005a8c;
+      text-align: center;
+      font-weight: 700;
+    }
+    .location-list a:hover { color: #ffffff; background: #005a8c; }
+    @media (max-width: 991px) {
+      .location-list { grid-template-columns: repeat(2, 1fr); }
+      .location-list li:nth-child(2n) { border-right: 0; }
+      .location-list li { border-bottom: 1px solid #dce1e6; }
+      .location-list li:last-child { grid-column: 1 / -1; border-bottom: 0; }
+    }
+    @media (max-width: 560px) {
+      .regional-advisor-strip { padding: 42px 0 48px; }
+      .location-list { grid-template-columns: 1fr; }
+      .location-list li, .location-list li:nth-child(2n) {
+        border-right: 0;
+        border-bottom: 1px solid #dce1e6;
+      }
+      .location-list li:last-child { grid-column: auto; border-bottom: 0; }
+    }
+  </style>
+</head>
+<body>
+  <header class="site-header" id="global-header"></header>
+
+  <main>
+    <section class="privat-hero private-banking-hero" aria-labelledby="private-banking-title">
+      <div class="container privat-hero-inner">
+        <div class="privat-hero-copy">
+          <p class="hero-eyebrow">Private Banking</p>
+          <h1 id="private-banking-title">Ganz auf Sie abgestimmt</h1>
+          <p>Individuelle Vermögensbetreuung auf Augenhöhe – persönlich, diskret und mit einem klaren Blick auf Ihre Ziele.</p>
+          <a class="button" href="#ansprechpartner">Ansprechpartner finden</a>
+        </div>
+      </div>
+    </section>
+
+    <section class="product-section" id="ansprechpartner">
+      <div class="container product-layout">
+        <div class="product-copy">
+          <p class="section-kicker">Persönliche Begleitung</p>
+          <h2>Persönliche Vermögensbetreuung</h2>
+          <p>Unser Private-Banking-Team begleitet Sie ganzheitlich und entwickelt gemeinsam mit Ihnen eine Strategie, die zu Ihrer Lebenssituation, Ihren Vermögenszielen und Ihrer persönlichen Risikobereitschaft passt.</p>
+          <ul class="product-list">
+            <li>Ganzheitliche Analyse Ihres Vermögens</li>
+            <li>Individuelle Anlage- und Vorsorgestrategien</li>
+            <li>Verlässliche Begleitung durch einen festen Ansprechpartner</li>
+          </ul>
+          <a class="button" href="kontakt.html">Termin vereinbaren</a>
+        </div>
+        <div class="product-image private-advisor-image" role="img" aria-label="Persönliche Vermögensberatung"></div>
+      </div>
+    </section>
+
+    <section class="product-section product-section-warm" id="wertpapierdepots">
+      <div class="container product-layout product-layout-reverse">
+        <div class="product-copy">
+          <p class="section-kicker">Anlegen &amp; Verwalten</p>
+          <h2>Wertpapierdepots &amp; Vermögensverwaltung</h2>
+          <p>Profitieren Sie von langjähriger Expertise und einer maßgeschneiderten Vermögensverwaltung. Die SÜDWESTBANK wurde zum 18. Mal in Folge in der Elite der Vermögensverwalter ausgezeichnet.</p>
+          <ul class="product-list">
+            <li>Wertpapierdepots für individuelle Anlagestrategien</li>
+            <li>Ausgewählte Vermögensverwaltungsmodelle</li>
+            <li>Fortlaufende Überprüfung und persönliche Abstimmung</li>
+          </ul>
+          <a class="button" href="kontakt.html">Mehr erfahren</a>
+        </div>
+        <div class="product-image private-portfolio-image" role="img" aria-label="Wertpapierdepot und Vermögensverwaltung"></div>
+      </div>
+    </section>
+
+    <section class="product-section" id="finanzierung">
+      <div class="container product-layout">
+        <div class="product-copy">
+          <p class="section-kicker">Finanzierung &amp; Investition</p>
+          <h2>Individuelle Finanzierung</h2>
+          <p>Große private Vorhaben erfordern maßgeschneiderte Lösungen. Wir begleiten Sie bei Immobilien- und Investitionsfinanzierungen mit persönlicher Beratung und transparent strukturierten Konditionen.</p>
+          <ul class="product-list">
+            <li>Individuelle Immobilienfinanzierungen</li>
+            <li>Finanzierung größerer Investitionen</li>
+            <li>Strukturierte Beratung zu Tilgung und Laufzeit</li>
+          </ul>
+          <a class="button" href="kontakt.html">Termin vereinbaren</a>
+        </div>
+        <div class="product-image private-finance-image" role="img" aria-label="Individuelle Immobilienfinanzierung"></div>
+      </div>
+    </section>
+
+    <section class="product-section product-section-warm" id="nachfolge">
+      <div class="container product-layout product-layout-reverse">
+        <div class="product-copy">
+          <p class="section-kicker">Nachfolge &amp; Vermögensplanung</p>
+          <h2>Nachfolgeplanung, Erben &amp; Vererben</h2>
+          <p>Eine gut vorbereitete Vermögensnachfolge schafft Sicherheit über Generationen hinweg. Gemeinsam ordnen wir Vermögen, Wünsche und Verantwortlichkeiten für Familie und Unternehmen.</p>
+          <ul class="product-list">
+            <li>Generationenübergreifende Vermögenssicherung</li>
+            <li>Nachfolgeplanung für Unternehmen und Privateigentum</li>
+            <li>Strukturierte Beratung zu Erben und Vererben</li>
+          </ul>
+          <a class="button" href="kontakt.html">Mehr erfahren</a>
+        </div>
+        <div class="product-image private-family-image" role="img" aria-label="Nachfolgeplanung für Familie und Vermögen"></div>
+      </div>
+    </section>
+
+    <section class="product-section" id="stiftungen">
+      <div class="container product-layout">
+        <div class="product-copy">
+          <p class="section-kicker">Stiftungen</p>
+          <h2>Beratung und Vermögensmanagement für Stiftungen</h2>
+          <p>Wir unterstützen Stifter und Stiftungsgremien bei Vermögensverwaltung, Anlagestrategie und langfristiger Sicherung des Stiftungszwecks – persönlich und auf Augenhöhe.</p>
+          <ul class="product-list">
+            <li>Konzeption eines passenden Vermögensmanagements</li>
+            <li>Anlagestrategien für langfristige Stiftungsziele</li>
+            <li>Persönliche Begleitung von Gremien und Entscheidungsprozessen</li>
+          </ul>
+          <a class="button" href="kontakt.html">Termin vereinbaren</a>
+        </div>
+        <div class="product-image private-foundation-image" role="img" aria-label="Beratung für Stiftungen"></div>
+      </div>
+    </section>
+
+    <section class="regional-advisor-strip" aria-labelledby="advisor-locations">
+      <div class="container">
+        <p class="section-kicker">Regional persönlich</p>
+        <h2 id="advisor-locations">Private Banking in Baden-Württemberg</h2>
+        <p>Unsere persönlichen Ansprechpartner sind in Ihrer Region für Sie da.</p>
+        <ul class="location-list" aria-label="Private Banking Standorte">
+          <li><a href="kontakt.html">Stuttgart</a></li>
+          <li><a href="kontakt.html">Freiburg</a></li>
+          <li><a href="kontakt.html">Karlsruhe</a></li>
+          <li><a href="kontakt.html">Mannheim</a></li>
+          <li><a href="kontakt.html">Ulm</a></li>
+        </ul>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer" id="global-footer"></footer>
+  <script src="script.js"></script>
+</body>
+</html>

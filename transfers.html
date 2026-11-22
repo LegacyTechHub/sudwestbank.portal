@@ -1,0 +1,150 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Send money securely to another account or saved beneficiary.">
+  <title>Money Transfer | SÜDWESTBANK</title>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="portal.css">
+</head>
+<body class="portal-authenticated" data-portal-language="en">
+  <header class="site-header" id="global-header"></header>
+  <div class="portal-nav-wrap">
+    <div class="portal-container portal-nav-header">
+      <p class="portal-nav-label">Online Banking</p>
+      <button class="portal-nav-toggle" type="button" aria-expanded="false" aria-controls="portal-navigation">Menu</button>
+    </div>
+    <nav class="portal-container portal-nav" id="portal-navigation" aria-label="Online Banking Navigation">
+      <a href="dashboard.html">Dashboard</a>
+      <a href="transfers.html" aria-current="page">Money Transfer</a>
+      <a href="transactions.html">Transaction History</a>
+      <a href="beneficiaries.html" data-demo-route>Beneficiaries</a>
+      <a href="cards-statements.html">Cards &amp; Statements</a>
+      <a href="profile-settings.html">Profile &amp; Security</a>
+      <a href="support.html">Support</a>
+      <a class="portal-logout" href="online-banking.html">Logout</a>
+    </nav>
+  </div>
+
+  <main class="portal-page portal-transfer-page">
+    <div class="portal-container portal-transfer-container">
+      <header class="portal-transfer-heading">
+        <h1>Money Transfer</h1>
+        <p>Send money securely to another account or saved beneficiary.</p>
+      </header>
+
+      <section class="portal-card portal-transfer-card portal-transfer-panel" id="transfer-form-panel" aria-labelledby="transfer-form-title">
+        <h2 id="transfer-form-title">Transfer details</h2>
+        <form class="portal-form" id="money-transfer-form" novalidate>
+          <div class="portal-form-grid">
+            <div class="portal-field">
+              <label for="source-account">Source Account</label>
+              <div class="portal-input-group">
+                <span class="portal-input-icon" aria-hidden="true">
+                  <svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="1"/><path d="M3 10h18M7 15h3"/></svg>
+                </span>
+                <select id="source-account" name="sourceAccount" required>
+                  <option value="giro-privat">GiroPrivat Account — Available Balance: €1,000.00</option>
+                </select>
+              </div>
+            </div>
+            <div class="portal-field">
+              <label for="saved-beneficiary">Saved Beneficiary <span class="portal-optional">(optional)</span></label>
+              <div class="portal-input-group">
+                <span class="portal-input-icon" aria-hidden="true">
+                  <svg viewBox="0 0 24 24"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20a6.5 6.5 0 0 1 13 0M17 8h5M19.5 5.5v5"/></svg>
+                </span>
+                <select id="saved-beneficiary" name="savedBeneficiary">
+                  <option value="">Select a saved beneficiary (optional)</option>
+                </select>
+              </div>
+            </div>
+            <div class="portal-field">
+              <label for="recipient-name">Recipient Full Name</label>
+              <div class="portal-input-group">
+                <span class="portal-input-icon" aria-hidden="true">
+                  <svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="3.5"/><path d="M4.5 20a7.5 7.5 0 0 1 15 0"/></svg>
+                </span>
+                <input id="recipient-name" name="recipientName" type="text" autocomplete="off" maxlength="100" required>
+              </div>
+            </div>
+            <div class="portal-field">
+              <label for="recipient-account">Recipient Account Number / IBAN</label>
+              <div class="portal-input-group">
+                <span class="portal-input-icon" aria-hidden="true">
+                  <svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="1"/><path d="m4 7 8 6 8-6M6 16h5"/></svg>
+                </span>
+                <input id="recipient-account" name="recipientAccount" type="text" autocomplete="off" maxlength="34" required>
+              </div>
+            </div>
+            <div class="portal-field">
+              <label for="bank-name">Bank Name / BIC <span class="portal-optional">(optional)</span></label>
+              <div class="portal-input-group">
+                <span class="portal-input-icon" aria-hidden="true">
+                  <svg viewBox="0 0 24 24"><path d="m3 9 9-5 9 5M5 10v8M9 10v8M15 10v8M19 10v8M3 20h18M2 9h20"/></svg>
+                </span>
+                <input id="bank-name" name="bankName" type="text" autocomplete="off" maxlength="120">
+              </div>
+            </div>
+            <div class="portal-field">
+              <label for="transfer-amount">Amount (€)</label>
+              <div class="portal-input-group">
+                <span class="portal-input-icon portal-currency-icon" aria-hidden="true">€</span>
+                <input id="transfer-amount" name="amount" type="number" min="0.01" step="0.01" inputmode="decimal" required>
+              </div>
+            </div>
+            <div class="portal-field">
+              <label for="payment-reference">Payment Reference / Description <span class="portal-optional">(optional)</span></label>
+              <div class="portal-input-group">
+                <span class="portal-input-icon" aria-hidden="true">
+                  <svg viewBox="0 0 24 24"><path d="M5 4h14v16H5zM8 8h8M8 12h8M8 16h5"/></svg>
+                </span>
+                <input id="payment-reference" name="paymentReference" type="text" maxlength="140" placeholder="Invoice payment or Family support">
+              </div>
+            </div>
+            <div class="portal-field">
+              <label for="execution-date">Execution Date</label>
+              <div class="portal-input-group">
+                <span class="portal-input-icon" aria-hidden="true">
+                  <svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="16" rx="1"/><path d="M7 3v4M17 3v4M3 10h18M8 14h2M14 14h2"/></svg>
+                </span>
+                <input id="execution-date" name="executionDate" type="date" required>
+              </div>
+            </div>
+          </div>
+          <p class="portal-form-status" id="transfer-error" role="alert" aria-live="assertive"></p>
+          <button class="portal-primary-button portal-transfer-submit" type="submit">Send Money</button>
+        </form>
+      </section>
+
+      <section class="portal-card portal-transfer-success" id="transfer-success" aria-labelledby="transfer-success-title" aria-live="polite" hidden>
+        <div class="portal-success-icon" aria-hidden="true">
+          <svg viewBox="0 0 48 48"><circle cx="24" cy="24" r="21"/><path d="m14 24 7 7 14-15"/></svg>
+        </div>
+        <h2 id="transfer-success-title" tabindex="-1">Transfer Successful</h2>
+        <table class="portal-transfer-summary">
+          <tbody>
+            <tr><th scope="row">Recipient Name</th><td data-confirmation="recipientName"></td></tr>
+            <tr><th scope="row">Account / IBAN</th><td data-confirmation="recipientAccount"></td></tr>
+            <tr><th scope="row">Amount Sent</th><td data-confirmation="amount"></td></tr>
+            <tr><th scope="row">Reference ID</th><td data-confirmation="reference"></td></tr>
+            <tr><th scope="row">Date &amp; Time</th><td data-confirmation="dateTime"></td></tr>
+            <tr><th scope="row">Status</th><td data-confirmation="status"></td></tr>
+          </tbody>
+        </table>
+        <div class="portal-confirmation-actions">
+          <button class="portal-action-button portal-action-primary" id="make-another-transfer" type="button">Make Another Transfer</button>
+          <a class="portal-action-button" href="transactions.html">View Transaction History</a>
+        </div>
+      </section>
+    </div>
+  </main>
+  <footer class="site-footer" id="global-footer"></footer>
+  <script src="script.js"></script>
+  <script src="portal.js"></script>
+
+  <script src="api-client.js"></script>
+  
+</body>
+</html>

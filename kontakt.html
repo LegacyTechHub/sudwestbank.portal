@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Kontakt zur SÜDWESTBANK: Ansprechpartner, Filialen, Geldautomaten und Beschwerdemanagement.">
+  <title>Kontakt | SÜDWESTBANK</title>
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    .kontakt-hero {
+      background:
+        linear-gradient(90deg, rgba(255,255,255,.94) 0%, rgba(255,255,255,.76) 48%, rgba(255,255,255,.12) 100%),
+        url("https://images.unsplash.com/photo-1529156069898-49953e39b3ac?auto=format&fit=crop&w=1800&q=85") center/cover;
+    }
+    .kontakt-grid { padding: 58px 0 68px; background: #f5f6f8; }
+    .kontakt-form-section { padding: 68px 0; background: #ffffff; }
+    .kontakt-form-layout { display: grid; grid-template-columns: 1.25fr .75fr; gap: 70px; align-items: start; }
+    .kontakt-form-layout h2 { margin: 0 0 8px; color: #005a8c; font-size: 34px; }
+    .kontakt-form-layout .contact-intro { margin: 0 0 24px; color: #333333; }
+    .kontakt-form { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    .kontakt-form label { display: block; font-weight: 700; }
+    .kontakt-form input, .kontakt-form select, .kontakt-form textarea {
+      width: 100%; margin-top: 7px; border: 1px solid #dce1e6; border-radius: 4px;
+      padding: 12px; background: #ffffff; color: #333333;
+    }
+    .kontakt-form textarea { min-height: 130px; resize: vertical; }
+    .form-full { grid-column: 1 / -1; }
+    .kontakt-form .button { border: 0; }
+    .form-contact-card { padding: 28px; border: 1px solid #dce1e6; border-radius: 3px; background: #f5f6f8; }
+    .form-contact-card h3 { margin: 0 0 16px; color: #005a8c; }
+    .form-contact-card p { margin: 8px 0; }
+    .form-contact-card a { color: #005a8c; font-weight: 700; }
+    @media (max-width: 991px) {
+      .kontakt-form-layout { grid-template-columns: 1fr; gap: 36px; }
+    }
+    @media (max-width: 560px) {
+      .kontakt-form { grid-template-columns: 1fr; }
+      .form-full { grid-column: auto; }
+    }
+  </style>
+</head>
+<body>
+  <header class="site-header" id="global-header"></header>
+  <main>
+    <section class="privat-hero kontakt-hero" aria-labelledby="kontakt-title">
+      <div class="container privat-hero-inner">
+        <div class="privat-hero-copy">
+          <p class="hero-eyebrow">Kontakt</p>
+          <h1 id="kontakt-title">Ihre direkten Wege zu uns</h1>
+          <p>Ob Sie einen persönlichen Ansprechpartner, die nächste Filiale oder einen Termin suchen – unsere Ansprechpartner sind persönlich für Sie da.</p>
+        </div>
+      </div>
+    </section>
+    <section class="kontakt-grid">
+      <div class="container teaser-grid">
+        <article class="teaser-card"><h3>Filialen in Ihrer Nähe</h3><p>Finden Sie Standorte in Baden-Württemberg schnell und direkt. Wir freuen uns auf Ihren Besuch.</p><a class="more-link" href="kontakt.html">Mehr <span>→</span></a></article>
+        <article class="teaser-card"><h3>Geldautomatensuche</h3><p>Nutzen Sie bundesweit über 2.800 Geldautomaten kostenlos Bargeld abheben.</p><a class="more-link" href="kontakt.html">Mehr <span>→</span></a></article>
+        <article class="teaser-card"><h3>Beschwerdemanagement</h3><p>Unser Beschwerdemanagement ist Ihr direkter Draht für Anliegen, Fragen und Lob.</p><a class="more-link" href="kontakt.html">Mehr <span>→</span></a></article>
+      </div>
+    </section>
+    <section class="kontakt-form-section">
+      <div class="container kontakt-form-layout">
+        <div>
+          <h2>Nachricht oder Rückruf</h2>
+          <p class="contact-intro">Schildern Sie uns Ihr Anliegen. Wir melden uns persönlich bei Ihnen zurück.</p>
+          <form class="kontakt-form">
+            <label>Anrede<select name="anrede"><option>Bitte auswählen</option><option>Herr</option><option>Frau</option><option>Divers</option></select></label>
+            <div></div>
+            <label>Vorname<input type="text" name="vorname" autocomplete="given-name"></label>
+            <label>Nachname<input type="text" name="nachname" autocomplete="family-name"></label>
+            <label>Telefon<input type="tel" name="telefon" autocomplete="tel"></label>
+            <label>E-Mail<input type="email" name="email" autocomplete="email"></label>
+            <label class="form-full">Ihr Anliegen<textarea name="anliegen"></textarea></label>
+            <button class="button form-full" type="submit">Nachricht absenden</button>
+          </form>
+        </div>
+        <aside class="form-contact-card" aria-label="Direkte Kontaktdaten">
+          <h3>Wir sind für Sie da</h3>
+          <p><strong>Telefon:</strong><br><a href="tel:+4971166446644">0711/664 466 44</a></p>
+          <p><strong>E-Mail:</strong><br><a href="mailto:inforsuedwestbank@gmail.com">inforsuedwestbank@gmail.com</a></p>
+          <p><strong>Montag bis Donnerstag</strong><br>9:00 Uhr bis 16:30 Uhr</p>
+          <p><strong>Freitag</strong><br>9:00 Uhr bis 15:00 Uhr</p>
+        </aside>
+      </div>
+    </section>
+  </main>
+  <footer class="site-footer" id="global-footer"></footer>
+  <script src="script.js"></script>
+</body>
+</html>

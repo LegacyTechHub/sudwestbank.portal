@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Online-Banking Demo: Karten, Kontoauszüge und Benachrichtigungen.">
+  <title>Karten &amp; Kontoauszüge | SÜDWESTBANK</title>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="portal.css">
+</head>
+<body class="portal-authenticated">
+  <header class="site-header" id="global-header"></header>
+  <div class="portal-nav-wrap">
+    <div class="portal-container portal-nav-header">
+      <p class="portal-nav-label">Online-Banking</p>
+      <button class="portal-nav-toggle" type="button" aria-expanded="false" aria-controls="portal-navigation">Menü</button>
+    </div>
+    <nav class="portal-container portal-nav" id="portal-navigation" aria-label="Online-Banking Navigation">
+      <a href="dashboard.html">Übersicht</a>
+      <a href="transfers.html" data-demo-route>Überweisung</a>
+      <a href="transactions.html">Umsätze</a>
+      <a href="beneficiaries.html" data-demo-route>Empfänger</a>
+      <a href="cards-statements.html" aria-current="page">Karten &amp; Auszüge</a>
+      <a href="profile-settings.html">Profil &amp; Sicherheit</a>
+      <a href="support.html">Support</a>
+      <a class="portal-logout" href="online-banking.html">Abmelden</a>
+    </nav>
+  </div>
+  <main class="portal-page">
+    <div class="portal-container">
+      <header class="portal-welcome">
+        <div>
+          <p class="portal-eyebrow">Online-Banking · Demo</p>
+          <h1>Karten &amp; Kontoauszüge</h1>
+        </div>
+      </header>
+      <p class="portal-demo-notice" role="note">Prototyp — Kartenfunktionen und Einstellungen sind nicht mit einem Bankkonto verbunden.</p>
+
+      <section class="portal-content-section" aria-labelledby="cards-title">
+        <h2 id="cards-title">Ihre Karten</h2>
+        <div class="portal-card-overview">
+          <article class="portal-card portal-payment-card">
+            <h3>Debitkarte</h3>
+            <p>Girokonto · Demo-Endziffern 0000</p>
+            <div class="portal-switch-row">
+              <span id="debit-card-status">Karte aktivieren (Demo)</span>
+              <label class="portal-switch">
+                <input type="checkbox" aria-labelledby="debit-card-status" data-api-hook="TODO: Kartenstatus mit Karten-API synchronisieren">
+                <span aria-hidden="true"></span>
+              </label>
+            </div>
+          </article>
+          <article class="portal-card portal-payment-card">
+            <h3>Kreditkarte</h3>
+            <p>Kreditkartenkonto · Demo-Endziffern 0000</p>
+            <div class="portal-switch-row">
+              <span id="credit-card-status">Karte aktivieren (Demo)</span>
+              <label class="portal-switch">
+                <input type="checkbox" aria-labelledby="credit-card-status" data-api-hook="TODO: Kartenstatus mit Karten-API synchronisieren">
+                <span aria-hidden="true"></span>
+              </label>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <section class="portal-content-section" aria-labelledby="statements-title">
+        <h2 id="statements-title">Kontoauszüge</h2>
+        <div class="portal-table-scroll">
+          <table>
+            <thead><tr><th scope="col">Zeitraum</th><th scope="col">Dokument</th><th scope="col">Status</th></tr></thead>
+            <tbody>
+              <tr data-bind="statementList">
+                <td colspan="3"><div class="portal-empty-state"><p>Keine Kontoauszüge verfügbar</p></div></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="portal-content-section" aria-labelledby="notifications-title">
+        <h2 id="notifications-title">Benachrichtigungen</h2>
+        <ul class="portal-notification-list" data-bind="notificationList">
+          <li class="portal-empty-state"><p>Keine neuen Benachrichtigungen</p></li>
+        </ul>
+      </section>
+    </div>
+  </main>
+  <footer class="site-footer" id="global-footer"></footer>
+  <script src="script.js"></script>
+  <script src="portal.js"></script>
+
+  <script src="api-client.js"></script>
+  
+</body>
+</html>

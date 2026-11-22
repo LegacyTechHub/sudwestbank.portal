@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Online banking demo: transaction history.">
+  <title>Transaction History | SÜDWESTBANK</title>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="portal.css">
+</head>
+<body class="portal-authenticated">
+  <header class="site-header" id="global-header"></header>
+  <div class="portal-nav-wrap">
+    <div class="portal-container portal-nav-header">
+      <p class="portal-nav-label">Online-Banking</p>
+      <button class="portal-nav-toggle" type="button" aria-expanded="false" aria-controls="portal-navigation">Menü</button>
+    </div>
+    <nav class="portal-container portal-nav" id="portal-navigation" aria-label="Online-Banking Navigation">
+      <a href="dashboard.html">Übersicht</a>
+      <a href="transfers.html">Money Transfer</a>
+      <a href="transactions.html" aria-current="page">Transactions</a>
+      <a href="beneficiaries.html" data-demo-route>Empfänger</a>
+      <a href="cards-statements.html">Karten &amp; Auszüge</a>
+      <a href="profile-settings.html">Profil &amp; Sicherheit</a>
+      <a href="support.html">Support</a>
+      <a class="portal-logout" href="online-banking.html">Abmelden</a>
+    </nav>
+  </div>
+  <main class="portal-page">
+    <div class="portal-container">
+      <header class="portal-welcome">
+        <div>
+          <h1>Transaction History</h1>
+        </div>
+      </header>
+      <section class="portal-content-section" aria-labelledby="transactions-title">
+        <h2 id="transactions-title">Recent Transactions</h2>
+        <div class="portal-empty-state" data-bind="transactionList">
+          <p>No recent transaction history</p>
+          <a class="portal-action-button portal-action-primary" href="transfers.html">Make a transfer</a>
+        </div>
+        <p class="portal-form-status" data-portal-state-status role="status" aria-live="polite"></p>
+      </section>
+    </div>
+  </main>
+  <footer class="site-footer" id="global-footer"></footer>
+  <script src="script.js"></script>
+  <script src="portal.js"></script>
+
+  <script src="api-client.js"></script>
+  
+</body>
+</html>

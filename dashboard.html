@@ -1,0 +1,162 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="SÜDWESTBANK Online-Banking Übersicht.">
+  <title>Online-Banking Übersicht | SÜDWESTBANK</title>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="portal.css">
+</head>
+<body class="portal-authenticated">
+  <header class="site-header" id="global-header"></header>
+  <div class="portal-nav-wrap">
+    <div class="portal-container portal-nav-header">
+      <p class="portal-nav-label">Online-Banking</p>
+      <button class="portal-nav-toggle" type="button" aria-expanded="false" aria-controls="portal-navigation">Menü</button>
+    </div>
+    <nav class="portal-container portal-nav" id="portal-navigation" aria-label="Online-Banking Navigation">
+      <a href="dashboard.html" aria-current="page">Übersicht</a>
+      <a href="transfers.html">Money Transfer</a>
+      <a href="transactions.html">Transactions</a>
+      <a href="beneficiaries.html">Empfänger</a>
+      <a href="cards-statements.html">Karten &amp; Auszüge</a>
+      <a href="profile-settings.html">Profil &amp; Sicherheit</a>
+      <a href="support.html">Support</a>
+      <a class="portal-logout" href="online-banking.html">Abmelden</a>
+    </nav>
+  </div>
+  <main class="portal-page portal-dashboard">
+    <div class="portal-container">
+      <header class="portal-welcome">
+        <div>
+          <p class="portal-eyebrow">Ihre Übersicht</p>
+          <h1>Willkommen, <span data-user-name>Kunde</span></h1>
+        </div>
+        <p class="portal-last-login">Sitzung aktiv</p>
+      </header>
+
+      <section class="portal-accounts" aria-labelledby="accounts-title">
+        <div class="portal-section-heading">
+          <h2 id="accounts-title">Ihre Konten</h2>
+          <button class="portal-balance-toggle" type="button" data-balance-toggle aria-pressed="false">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M2 12s3.6-6 10-6 10 6 10 6-3.6 6-10 6-10-6-10-6Z"/><circle cx="12" cy="12" r="2.5"/></svg>
+            <span data-balance-label>Betrag ausblenden</span>
+          </button>
+        </div>
+        <div class="portal-account-grid">
+          <article class="portal-card portal-account-card">
+            <div class="portal-account-card-head">
+              <div><p class="portal-account-type">Girokonto</p><h3>GiroPrivat Konto</h3></div>
+              <span class="portal-status">Aktiv</span>
+            </div>
+            <p class="portal-balance-label">Verfügbarer Betrag</p>
+            <p class="portal-account-balance" data-balance data-account-balance data-user-balance>EUR 0,00</p>
+            <dl class="portal-account-details">
+              <div><dt>IBAN</dt><dd data-user-iban>—</dd></div>
+              <div><dt>BIC</dt><dd>SWBSDESSXXX</dd></div>
+              <div><dt>Kontostatus</dt><dd>Aktiv</dd></div>
+            </dl>
+          </article>
+          <article class="portal-card portal-account-card portal-savings-card">
+            <div class="portal-account-card-head">
+              <div><p class="portal-account-type">Festgeld</p><h3>RentaAnlage Festgeld</h3></div>
+              <span class="portal-interest">3,00% p.a.</span>
+            </div>
+            <p class="portal-balance-label">Anlagebetrag</p>
+            <p class="portal-account-balance" data-balance>EUR 0,00</p>
+            <p class="portal-savings-caption">Festgeldkonto für langfristige Rücklagen.</p>
+          </article>
+        </div>
+      </section>
+
+      <section class="portal-quick-actions" aria-labelledby="quick-actions-title">
+        <h2 id="quick-actions-title">Direkt zu</h2>
+        <div class="portal-quick-access-grid">
+          <a class="portal-quick-access-card" href="transfers.html">
+            <span class="portal-quick-access-title">Money Transfer</span>
+            <span class="portal-action-button portal-action-primary">Send money</span>
+          </a>
+          <a class="portal-quick-access-card" href="transactions.html">
+            <span class="portal-quick-access-title">Transaction History</span>
+            <span class="portal-action-button">View transactions</span>
+          </a>
+          <a class="portal-quick-access-card" href="beneficiaries.html">
+            <span class="portal-quick-access-title">Empfänger verwalten</span>
+            <span class="portal-action-button">Empfänger öffnen</span>
+          </a>
+          <a class="portal-quick-access-card" href="cards-statements.html">
+            <span class="portal-quick-access-title">Karten &amp; Kontoauszüge</span>
+            <span class="portal-action-button">Karten ansehen</span>
+          </a>
+          <a class="portal-quick-access-card" href="profile-settings.html">
+            <span class="portal-quick-access-title">Profil &amp; Sicherheit</span>
+            <span class="portal-action-button">Profil verwalten</span>
+          </a>
+          <a class="portal-quick-access-card" href="support.html">
+            <span class="portal-quick-access-title">Kundenservice &amp; Hilfe</span>
+            <span class="portal-action-button">Hilfe erhalten</span>
+          </a>
+        </div>
+        <p class="portal-action-status" id="portal-action-status" role="status" aria-live="polite"></p>
+      </section>
+
+      <section class="portal-transactions" aria-labelledby="transactions-title">
+        <div class="portal-section-heading">
+          <div><p class="portal-eyebrow">Transaction activity</p><h2 id="transactions-title">Recent Transactions</h2></div>
+          <a class="portal-text-link" href="transactions.html">View all transactions</a>
+        </div>
+        <div class="portal-empty-state" data-bind="transactionList" data-transaction-view="dashboard">
+          <p>No recent transaction history</p>
+          <a class="portal-action-button portal-action-primary" href="transfers.html">Make a transfer</a>
+        </div>
+        <p class="portal-form-status" data-portal-state-status role="status" aria-live="polite"></p>
+      </section>
+    </div>
+  </main>
+  <footer class="site-footer" id="global-footer"></footer>
+  <script src="script.js"></script>
+  <script src="portal.js"></script>
+  <script src="api-client.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', async () => {
+      if (typeof apiFetch !== 'function' || !getToken()) return;
+      try {
+        const { recentTransactions } = await apiFetch('/api/dashboard');
+        const container = document.querySelector('[data-bind="transactionList"]');
+        if (container && recentTransactions && recentTransactions.length > 0) {
+          container.className = 'portal-table-scroll';
+          container.innerHTML = `
+            <table>
+              <thead>
+                <tr>
+                  <th>Date</th>
+                  <th>Recipient / Description</th>
+                  <th>Reference ID</th>
+                  <th>Type</th>
+                  <th>Amount</th>
+                  <th>Status</th>
+                </tr>
+              </thead>
+              <tbody>
+                ${recentTransactions.map(tx => `
+                  <tr>
+                    <td>${new Date(tx.created_at).toLocaleDateString('de-DE')}</td>
+                    <td>${tx.recipient_name || ''}${tx.description ? `<br><small>${tx.description}</small>` : ''}</td>
+                    <td>${tx.reference_id}</td>
+                    <td>${tx.type}</td>
+                    <td>${Number(tx.amount).toFixed(2)}</td>
+                    <td>${tx.status}</td>
+                  </tr>
+                `).join('')}
+              </tbody>
+            </table>
+          `;
+        }
+      } catch (err) {
+        console.error(err);
+      }
+    });
+  </script>
+</body>
+</html>

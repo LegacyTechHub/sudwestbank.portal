@@ -1,0 +1,99 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Online-Banking Demo: Profil- und Sicherheitseinstellungen.">
+  <title>Profil &amp; Sicherheit | SÜDWESTBANK</title>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="portal.css">
+</head>
+<body class="portal-authenticated">
+  <header class="site-header" id="global-header"></header>
+  <div class="portal-nav-wrap">
+    <div class="portal-container portal-nav-header">
+      <p class="portal-nav-label">Online-Banking</p>
+      <button class="portal-nav-toggle" type="button" aria-expanded="false" aria-controls="portal-navigation">Menü</button>
+    </div>
+    <nav class="portal-container portal-nav" id="portal-navigation" aria-label="Online-Banking Navigation">
+      <a href="dashboard.html">Übersicht</a>
+      <a href="transfers.html" data-demo-route>Überweisung</a>
+      <a href="transactions.html">Umsätze</a>
+      <a href="beneficiaries.html" data-demo-route>Empfänger</a>
+      <a href="cards-statements.html">Karten &amp; Auszüge</a>
+      <a href="profile-settings.html" aria-current="page">Profil &amp; Sicherheit</a>
+      <a href="support.html">Support</a>
+      <a class="portal-logout" href="online-banking.html">Abmelden</a>
+    </nav>
+  </div>
+  <main class="portal-page">
+    <div class="portal-container">
+      <header class="portal-welcome">
+        <div>
+          <p class="portal-eyebrow">Online-Banking · Demo</p>
+          <h1>Profil &amp; Sicherheit</h1>
+        </div>
+      </header>
+      <p class="portal-demo-notice" role="note">Prototyp — Änderungen werden nicht gespeichert. Verwenden Sie keine echten persönlichen Daten.</p>
+
+      <section class="portal-content-section" aria-labelledby="profile-title">
+        <h2 id="profile-title">Persönliche Angaben</h2>
+        <div class="portal-card portal-content-card">
+          <form class="portal-form" data-api-hook="TODO: Profil über PUT /api/profile laden und speichern">
+            <div class="portal-form-grid">
+              <div class="portal-field">
+                <label for="profile-name">Name</label>
+                <input id="profile-name" name="name" type="text" autocomplete="name" value="Max Mustermann" data-api-field="name">
+              </div>
+              <div class="portal-field">
+                <label for="profile-phone">Telefon</label>
+                <input id="profile-phone" name="phone" type="tel" autocomplete="tel" placeholder="Telefonnummer eingeben" data-api-field="phone">
+              </div>
+              <div class="portal-field portal-field--wide">
+                <label for="profile-address">Adresse</label>
+                <input id="profile-address" name="address" type="text" autocomplete="street-address" placeholder="Straße, Hausnummer, PLZ und Ort" data-api-field="address">
+              </div>
+              <div class="portal-field portal-field--wide">
+                <label for="profile-email">E-Mail</label>
+                <input id="profile-email" name="email" type="email" autocomplete="email" value="inforsuedwestbank@gmail.com" data-api-field="email">
+              </div>
+            </div>
+            <p class="portal-inline-note">Die angezeigten Profildaten sind Demo-Inhalte.</p>
+            <button class="portal-primary-button" type="button" data-api-hook="TODO: Profiländerungen an PUT /api/profile senden">Änderungen speichern</button>
+          </form>
+        </div>
+      </section>
+
+      <section class="portal-content-section" aria-labelledby="security-title">
+        <h2 id="security-title">Sicherheitseinstellungen</h2>
+        <div class="portal-card portal-content-card">
+          <form class="portal-form" data-api-hook="TODO: Sicherheitseinstellungen über /api/security aktualisieren">
+            <div class="portal-form-grid">
+              <div class="portal-field">
+                <label for="security-current-password">Aktuelles Passwort</label>
+                <input id="security-current-password" name="currentPassword" type="password" autocomplete="current-password" placeholder="Für die Demo nicht ausfüllen" data-api-field="currentPassword">
+              </div>
+              <div class="portal-field">
+                <label for="security-new-password">Neues Passwort</label>
+                <input id="security-new-password" name="newPassword" type="password" autocomplete="new-password" placeholder="Für die Demo nicht ausfüllen" data-api-field="newPassword">
+              </div>
+              <div class="portal-field portal-field--wide">
+                <label for="security-confirm-password">Neues Passwort bestätigen</label>
+                <input id="security-confirm-password" name="confirmPassword" type="password" autocomplete="new-password" placeholder="Für die Demo nicht ausfüllen" data-api-field="confirmPassword">
+              </div>
+            </div>
+            <p class="portal-inline-note">Passwortänderungen sind im Prototyp deaktiviert. Geben Sie hier keine echten Zugangsdaten ein.</p>
+            <button class="portal-primary-button" type="button" data-api-hook="TODO: Passwortänderung sicher an /api/security/password senden">Sicherheitseinstellungen speichern</button>
+          </form>
+        </div>
+      </section>
+    </div>
+  </main>
+  <footer class="site-footer" id="global-footer"></footer>
+  <script src="script.js"></script>
+  <script src="portal.js"></script>
+
+  <script src="api-client.js"></script>
+  
+</body>
+</html>

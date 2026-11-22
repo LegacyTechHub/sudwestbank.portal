@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Online-Banking Demo: Kundenservice und Hilfe.">
+  <title>Kundenservice &amp; Hilfe | SÜDWESTBANK</title>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="portal.css">
+</head>
+<body class="portal-authenticated">
+  <header class="site-header" id="global-header"></header>
+  <div class="portal-nav-wrap">
+    <div class="portal-container portal-nav-header">
+      <p class="portal-nav-label">Online-Banking</p>
+      <button class="portal-nav-toggle" type="button" aria-expanded="false" aria-controls="portal-navigation">Menü</button>
+    </div>
+    <nav class="portal-container portal-nav" id="portal-navigation" aria-label="Online-Banking Navigation">
+      <a href="dashboard.html">Übersicht</a>
+      <a href="transfers.html" data-demo-route>Überweisung</a>
+      <a href="transactions.html">Umsätze</a>
+      <a href="beneficiaries.html" data-demo-route>Empfänger</a>
+      <a href="cards-statements.html">Karten &amp; Auszüge</a>
+      <a href="profile-settings.html">Profil &amp; Sicherheit</a>
+      <a href="support.html" aria-current="page">Support</a>
+      <a class="portal-logout" href="online-banking.html">Abmelden</a>
+    </nav>
+  </div>
+  <main class="portal-page">
+    <div class="portal-container">
+      <header class="portal-welcome">
+        <div>
+          <p class="portal-eyebrow">Online-Banking · Demo</p>
+          <h1>Kundenservice &amp; Hilfe</h1>
+        </div>
+      </header>
+      <p class="portal-demo-notice" role="note">Prototyp — Ihre Anfrage wird nicht übertragen. Senden Sie keine vertraulichen Konto- oder Zugangsdaten.</p>
+
+      <section class="portal-content-section" aria-labelledby="inquiry-title">
+        <h2 id="inquiry-title">Nachricht an den Kundenservice</h2>
+        <div class="portal-card portal-content-card">
+          <form class="portal-form" id="support-inquiry-form" data-api-hook="TODO: Anfrage über POST /api/support-inquiries senden">
+            <div class="portal-field">
+              <label for="support-subject">Betreff</label>
+              <input id="support-subject" name="subject" type="text" maxlength="120" required data-api-field="subject">
+            </div>
+            <div class="portal-field">
+              <label for="support-message">Nachricht</label>
+              <textarea id="support-message" name="message" rows="7" required data-api-field="message"></textarea>
+            </div>
+            <button class="portal-primary-button" type="submit" data-api-hook="TODO: Anfrage sicher an den Kundenservice übermitteln">Anfrage senden</button>
+            <p class="portal-form-status" id="support-inquiry-status" role="status" aria-live="polite"></p>
+            <p class="portal-inline-note">Demo-Formular: Die Nachricht wird nicht gespeichert oder versendet.</p>
+          </form>
+        </div>
+      </section>
+
+      <section class="portal-content-section" aria-labelledby="contact-title">
+        <h2 id="contact-title">Kontakt</h2>
+        <div class="portal-card portal-content-card">
+          <dl class="portal-contact-details">
+            <div><dt>Telefon</dt><dd><a href="tel:+4971166446644">0711/664 466 44</a></dd></div>
+            <div><dt>E-Mail</dt><dd><a href="mailto:inforsuedwestbank@gmail.com">inforsuedwestbank@gmail.com</a></dd></div>
+          </dl>
+        </div>
+      </section>
+    </div>
+  </main>
+  <footer class="site-footer" id="global-footer"></footer>
+  <script src="script.js"></script>
+  <script src="portal.js"></script>
+
+  <script src="api-client.js"></script>
+  
+</body>
+</html>
