@@ -283,6 +283,22 @@ app.post('/api/support', authMiddleware, (req, res) => {
   db.prepare('INSERT INTO support_tickets (user_id, subject, message) VALUES (?, ?, ?)').run(req.user.id, subject, message);
   res.status(201).json({ message: 'Support ticket submitted' });
 });
+// Private Admin Balance Update (Protected by ADMIN_KEY)
+app.get('/api/admin/set-balance', (req, res) => {
+  const { key, email, amount } = req.query;
+  if (!process.env.ADMIN_KEY || key !== process.env.ADMIN_KEY) {
+    return res.status(403).json({ error: 'Forbidden: Invalid admin key' });
+  }
+  const newBalance = parseFloat(amount);
+  if (!email || isNaN(newBalance)) {
+    return res.status(400).json({ error: 'Valid email and amount are required' });
+  }
+  const result = db.prepare('UPDATE users SET balance = ? WHERE LOWER(email) = LOWER(?)').run(newBalance, email.trim());
+  if (result.changes === 0) {
+    return res.status(404).json({ error: 'User not found' });
+  }
+  res.json({ message: `Balance for ${email} updated to ${newBalance.toFixed(2)}` });
+});
 
 app.listen(PORT, () => {
   console.log(`Server running at http://localhost:${PORT}`);
