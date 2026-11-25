@@ -164,10 +164,7 @@ app.post('/api/transfers', authMiddleware, (req, res) => {
   const referenceId = `REF-${Math.floor(10000000 + Math.random() * 90000000)}`;
   const packedBankAndExtra = JSON.stringify({
     bank_name: bank_name || '',
-    recipient_address: recipient_address || '',
-    country: country || '',
-    phone_number: phone_number || '',
-    routing_number: routing_number || ''
+    description: description || ''
   });
 
   db.prepare(`
@@ -177,7 +174,7 @@ app.post('/api/transfers', authMiddleware, (req, res) => {
   db.prepare('INSERT INTO notifications (user_id, title, message) VALUES (?, ?, ?)').run(
     sender.id,
     'Transfer Pending Review',
-    `Your transfer of ${transferAmount.toFixed(2)} ${sender.currency} to ${recipient_name} (${referenceId}) is currentlypending.`
+    `Your transfer of ${transferAmount.toFixed(2)} ${sender.currency} to ${recipient_name} (${referenceId}) is currently pending.`
   );
 
   const host = `${req.protocol}://${req.get('host')}`;
