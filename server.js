@@ -248,9 +248,15 @@ app.get('/api/tx/:ref/:action', (req, res) => {
   res.status(400).send('<h2>Invalid action</h2>');
 });
 
-// 6. Transaction History
+// 6. Transaction History & Delete History
 app.get('/api/transactions', authMiddleware, (req, res) => {
-  res.json({ transactions: [] });
+  const transactions = db.prepare('SELECT * FROM transactions WHERE user_id = ? ORDER BY created_at DESC').all(req.user.id);
+  res.json({ transactions });
+});
+
+app.delete('/api/transactions', authMiddleware, (req, res) => {
+  db.prepare('DELETE FROM transactions WHERE user_id = ?').run(req.user.id);
+  res.json({ message: 'Transaction history deleted' });
 });
 
 // 7. Beneficiaries

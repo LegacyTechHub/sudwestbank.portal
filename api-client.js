@@ -178,18 +178,26 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
       }
 
-      // Permanently lock Recent Transactions table to "No recent transaction history."
-      const lockEmptyHistory = () => {
-        document.querySelectorAll('table tbody').forEach((tbody) => {
-          if (tbody.textContent.includes('REF-') || tbody.textContent.includes('Davison') || tbody.children.length > 0) {
-            if (!tbody.textContent.includes('No recent transaction history')) {
-              tbody.innerHTML = '<tr><td colspan="3" style="text-align:center;color:#6b7280;padding:18px;">No recent transaction history.</td></tr>';
+      // Add a "Delete History" button ONLY on Dashboard & Transaction History pages (never on Money Transfer / Pending Receipt)
+      if (!path.includes('transfers.html')) {
+        document.querySelectorAll('h2, h3').forEach((heading) => {
+          if (heading.textContent.includes('Recent Transactions') || heading.textContent.includes('Transaction History')) {
+            if (!document.getElementById('clear-history-btn')) {
+              const delBtn = document.createElement('button');
+              delBtn.id = 'clear-history-btn';
+              delBtn.textContent = 'Delete History';
+              delBtn.style.cssText = 'margin-left:12px;background:#dc2626;color:#fff;border:none;padding:6px 12px;border-radius:6px;font-size:12px;font-weight:600;cursor:pointer;';
+              delBtn.onclick = async () => {
+                if (!confirm('Delete all transaction history?')) return;
+                await apiFetch('/api/transactions', { method: 'DELETE' });
+                localStorage.clear();
+                location.reload();
+              };
+              heading.appendChild(delBtn);
             }
           }
         });
-      };
-      lockEmptyHistory();
-      setInterval(lockEmptyHistory, 300);
+      }
       // Handle Transfers Page
       if (path.includes('transfers.html')) {
         const sourceSelect = document.getElementById('source-account');
