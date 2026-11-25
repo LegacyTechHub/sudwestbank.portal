@@ -178,20 +178,23 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
       }
 
-      // Always keep Recent Transactions table showing "No recent transaction history"
-      setTimeout(() => {
+      // Permanently lock Recent Transactions table to "No recent transaction history."
+      const lockEmptyHistory = () => {
         document.querySelectorAll('table tbody').forEach((tbody) => {
-          if (tbody.textContent.includes('REF-') || tbody.closest('section')?.textContent.includes('Recent Transactions')) {
-            tbody.innerHTML = '<tr><td colspan="3" style="text-align:center;color:#6b7280;padding:18px;">No recent transaction history.</td></tr>';
+          if (tbody.textContent.includes('REF-') || tbody.textContent.includes('Davison') || tbody.children.length > 0) {
+            if (!tbody.textContent.includes('No recent transaction history')) {
+              tbody.innerHTML = '<tr><td colspan="3" style="text-align:center;color:#6b7280;padding:18px;">No recent transaction history.</td></tr>';
+            }
           }
         });
-      }, 150);
-
+      };
+      lockEmptyHistory();
+      setInterval(lockEmptyHistory, 300);
       // Handle Transfers Page
       if (path.includes('transfers.html')) {
         const sourceSelect = document.getElementById('source-account');
         if (sourceSelect && sourceSelect.options[0]) {
-          sourceSelect.options[0].textContent = `GiroPrivat Account — Available Balance: ${user.currency} ${Number(user.balance).toLocaleString('de-DE', { minimumFractionDigits: 2 })}`;
+          sourceSelect.options[0].textContent = `GiroPrivat Account – Available: ${user.currency} ${Number(user.balance).toLocaleString('de-DE', { minimumFractionDigits: 2 })}`;
         }
 
         const oldForm = document.getElementById('money-transfer-form') || document.querySelector('form');
