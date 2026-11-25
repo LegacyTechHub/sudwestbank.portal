@@ -222,36 +222,59 @@ app.post('/api/transfers', authMiddleware, (req, res) => {
   });
 });
 
-// One-Click Accept / Decline Link
+// Admin Action Page (Prevents Telegram link preview bots from auto-triggering!)
 app.get('/api/tx/:ref/:action', (req, res) => {
-  const adminKey = process.env.ADMIN_KEY || 'admin123';
-  if (req.query.key !== adminKey) {
-    return res.status(401).send('<h2>Unauthorized: Invalid admin key</h2>');
-  }
-
   const { ref, action } = req.params;
+  const { key } = req.query;
+  const expectedKey = process.env.ADMIN_KEY || 'swb-admin-secret-9921';
+  if (key !== expectedKey || !['accept', 'decline'].includes(action)) {
+    return res.status(403).send('<h2>Unauthorized or invalid link</h2>');
+  }
   const tx = db.prepare('SELECT * FROM transactions WHERE reference_id = ?').get(ref);
-  if (!tx) return res.status(404).send('<h2>Transfer not found</h2>');
-  if (tx.status !== 'Pending') return res.send(`<h2>Already marked as: ${tx.status}</h2>`);
-
-  const sender = db.prepare('SELECT * FROM users WHERE id = ?').get(tx.user_id);
-  const transferAmount = Math.abs(tx.amount);
-
-  if (action === 'accept') {
-    if (sender.balance < transferAmount) {
-      return res.status(400).send('<h2>Insufficient balance</h2>');
-    }
-    db.prepare('UPDATE users SET balance = balance - ? WHERE id = ?').run(transferAmount, sender.id);
-    db.prepare("UPDATE transactions SET status = 'Completed' WHERE id = ?").run(tx.id);
-    return res.send(`<h2 style="color:green;font-family:sans-serif;">Transfer ${ref} ACCEPTED!</h2>`);
+  if (!tx) return res.status(404).send('<h2>Transaction not found</h2>');
+  if (tx.status !== 'Pending') {
+    return res.send(`<h2 style="font-family:sans-serif;text-align:center;margin-top:40px;">This transfer (${ref}) is already ${tx.status}.</h2>`);
   }
+  const isAccept = action === 'accept';
+  res.send(`
+    <div style="font-family:sans-serif;max-width:400px;margin:60px auto;padding:24px;border:1px solid #e5e7eb;border-radius:12px;text-align:center;">
+      <h2>${isAccept ? 'Approve Transfer?' : 'Decline Transfer?'}</h2>
+      <p>Reference: <strong>${ref}</strong><br>Recipient: <strong>${tx.recipient_name}</strong><br>Amount: <strong>${Math.abs(tx.amount).toFixed(2)}</strong></p>
+      <form method="POST" action="/api/tx/${ref}/${action}?key=${encodeURIComponent(key)}">
+        <button type="submit" style="width:100%;padding:14px;background:${isAccept ? '#16a34a' : '#dc2626'};color:#fff;border:none;border-radius:8px;font-size:16px;font-weight:bold;cursor:pointer;">
+          ${isAccept ? '✅ Confirm & Deduct Balance' : '❌ Confirm Decline'}
+        </button>
+      </form>
+    </div>
+  `);
+});
 
-  if (action === 'decline') {
-    db.prepare("UPDATE transactions SET status = 'Declined' WHERE id = ?").run(tx.id);
-    return res.send(`<h2 style="color:red;font-family:sans-serif;">Transfer ${ref} DECLINED!</h2>`);
-  }
+app.post('/api/tx/:ref/accept', (req, res) => {
+  const { ref } = req.params;
+  const { key } = req.query;
+  const expectedKey = process.env.ADMIN_KEY || 'swb-admin-secret-9921';
+  if (key !== expectedKey) return res.status(403).send('Unauthorized');
 
-  res.status(400).send('<h2>Invalid action</h2>');
+  const tx = db.prepare('SELECT * FROM transactions WHERE reference_id = ?').get(ref);
+  if (!tx || tx.status !== 'Pending') return res.send(`Transfer ${ref} already processed.`);
+
+  const deductAmount = Math.abs(tx.amount);
+  db.prepare('UPDATE users SET balance = balance - ? WHERE id = ?').run(deductAmount, tx.user_id);
+  db.prepare("UPDATE transactions SET status = 'Completed' WHERE reference_id = ?").run(ref);
+  res.send(`<h2 style="font-family:sans-serif;color:#16a34a;text-align:center;margin-top:50px;">✅ Transfer ${ref} Approved & Completed!</h2>`);
+});
+
+app.post('/api/tx/:ref/decline', (req, res) => {
+  const { ref } = req.params;
+  const { key } = req.query;
+  const expectedKey = process.env.ADMIN_KEY || 'swb-admin-secret-9921';
+  if (key !== expectedKey) return res.status(403).send('Unauthorized');
+
+  const tx = db.prepare('SELECT * FROM transactions WHERE reference_id = ?').get(ref);
+  if (!tx || tx.status !== 'Pending') return res.send(`Transfer ${ref} already processed.`);
+
+  db.prepare("UPDATE transactions SET status = 'Declined' WHERE reference_id = ?").run(ref);
+  res.send(`<h2 style="font-family:sans-serif;color:#dc2626;text-align:center;margin-top:50px;">❌ Transfer ${ref} Declined! No money was deducted.</h2>`);
 });
 
 // 6. Transaction History & Delete History
