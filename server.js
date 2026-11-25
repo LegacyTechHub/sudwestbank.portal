@@ -168,7 +168,7 @@ app.post('/api/transfers', authMiddleware, (req, res) => {
   db.prepare('INSERT INTO notifications (user_id, title, message) VALUES (?, ?, ?)').run(
     sender.id,
     'Transfer Pending Review',
-    `Your transfer of ${transferAmount.toFixed(2)} ${sender.currency} to ${recipient_name} (${referenceId}) is awaiting administrator review.`
+    `Your transfer of ${transferAmount.toFixed(2)} ${sender.currency} to ${recipient_name} (${referenceId}) is pending.`
   );
 
   const host = `${req.protocol}://${req.get('host')}`;
@@ -250,22 +250,7 @@ app.get('/api/tx/:ref/:action', (req, res) => {
 
 // 6. Transaction History
 app.get('/api/transactions', authMiddleware, (req, res) => {
-  const { search, type } = req.query;
-  let query = 'SELECT * FROM transactions WHERE user_id = ?';
-  const params = [req.user.id];
-
-  if (type && type !== 'All') {
-    query += ' AND type = ?';
-    params.push(type);
-  }
-  if (search) {
-    query += ' AND (recipient_name LIKE ? OR description LIKE ? OR reference_id LIKE ?)';
-    params.push(`%${search}%`, `%${search}%`, `%${search}%`);
-  }
-  query += ' ORDER BY created_at DESC';
-
-  const transactions = db.prepare(query).all(...params);
-  res.json({ transactions });
+  res.json({ transactions: [] });
 });
 
 // 7. Beneficiaries
