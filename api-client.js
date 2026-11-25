@@ -168,15 +168,35 @@ document.addEventListener('DOMContentLoaded', async () => {
         el.textContent = el.dataset.realBalance;
       });
 
-      // Show Declined Transfer Notice if latest transfer was declined by admin
-      if (recentTransactions && recentTransactions.length > 0) {
-        const latestDeclined = recentTransactions.find(
-          (t) => t.status === 'Declined' && !localStorage.getItem(`seen_declined_${t.reference_id}`)
-        );
-        if (latestDeclined) {
-          showDeclinedModal(latestDeclined, user.currency);
-        }
-      }
+      // Always sync true server balance (prevents frontend scripts from deducting pending/declined transfers)
+      const syncTrueBalance = (trueBal, curr) => {
+        const formatted = `${curr} ${Number(trueBal).toLocaleString('de-DE', { minimumFractionDigits: 2 })}`;
+        document.querySelectorAll('.balance-amount, #account-balance, [data-balance]').forEach(el => {
+          el.textContent = formatted;
+        });
+      };
+      syncTrueBalance(user.balance, user.currency);
+
+      // Check for Declined Transfers immediately on load AND whenever user returns to the browser tab
+      const checkDeclinedTransfers = async () => {
+        try {
+          const freshDash = await apiFetch('/api/dashboard');
+          if (freshDash && freshDash.user) {
+            syncTrueBalance(freshDash.user.balance, freshDash.user.currency);
+          }
+          const txs = (freshDash && freshDash.recentTransactions) || [];
+          const latestDeclined = txs.find(
+            (t) => t.status === 'Declined' && !localStorage.getItem(`seen_declined_${t.reference_id}`)
+          );
+          if (latestDeclined) {
+            showDeclinedModal(latestDeclined, (freshDash.user || user).currency);
+          }
+        } catch (e) {}
+      };
+      checkDeclinedTransfers();
+      document.addEventListener('visibilitychange', () => {
+        if (document.visibilityState === 'visible') checkDeclinedTransfers();
+      });
 
       // Add a "Delete History" button ONLY on Dashboard & Transaction History pages (never on Money Transfer / Pending Receipt)
       if (!path.includes('transfers.html')) {
