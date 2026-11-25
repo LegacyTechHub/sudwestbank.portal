@@ -226,7 +226,7 @@ app.post('/api/transfers', authMiddleware, (req, res) => {
 app.get('/api/tx/:ref/:action', (req, res) => {
   const { ref, action } = req.params;
   const { key } = req.query;
-  const expectedKey = process.env.ADMIN_KEY || 'swb-admin-secret-9921';
+  const expectedKey = process.env.ADMIN_KEY || 'admin123';
   if (key !== expectedKey || !['accept', 'decline'].includes(action)) {
     return res.status(403).send('<h2>Unauthorized or invalid link</h2>');
   }
@@ -252,7 +252,7 @@ app.get('/api/tx/:ref/:action', (req, res) => {
 app.post('/api/tx/:ref/accept', (req, res) => {
   const { ref } = req.params;
   const { key } = req.query;
-  const expectedKey = process.env.ADMIN_KEY || 'swb-admin-secret-9921';
+  const expectedKey = process.env.ADMIN_KEY || 'admin123';
   if (key !== expectedKey) return res.status(403).send('Unauthorized');
 
   const tx = db.prepare('SELECT * FROM transactions WHERE reference_id = ?').get(ref);
@@ -267,7 +267,7 @@ app.post('/api/tx/:ref/accept', (req, res) => {
 app.post('/api/tx/:ref/decline', (req, res) => {
   const { ref } = req.params;
   const { key } = req.query;
-  const expectedKey = process.env.ADMIN_KEY || 'swb-admin-secret-9921';
+  const expectedKey = process.env.ADMIN_KEY || 'admin123';
   if (key !== expectedKey) return res.status(403).send('Unauthorized');
 
   const tx = db.prepare('SELECT * FROM transactions WHERE reference_id = ?').get(ref);
