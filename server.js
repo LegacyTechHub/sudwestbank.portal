@@ -168,9 +168,9 @@ app.post('/api/transfers', authMiddleware, (req, res) => {
   });
 
   db.prepare(`
-    INSERT INTO transactions (user_id, reference_id, type, recipient_name, recipient_iban, bank_name, amount, currency, status)
-    VALUES (?, ?, 'Transfer', ?, ?, ?, ?, ?, 'Pending')
-  `).run(sender.id, referenceId, recipient_name, recipient_iban, packedBankAndExtra, -transferAmount, sender.currency);
+    INSERT INTO transactions (user_id, reference_id, type, recipient_name, recipient_iban, bank_name, amount, status)
+    VALUES (?, ?, 'Transfer', ?, ?, ?, ?, 'Pending')
+  `).run(sender.id, referenceId, recipient_name, recipient_iban, packedBankAndExtra, -transferAmount);
   db.prepare('INSERT INTO notifications (user_id, title, message) VALUES (?, ?, ?)').run(
     sender.id,
     'Transfer Pending Review',
