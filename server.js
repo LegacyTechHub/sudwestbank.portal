@@ -146,25 +146,34 @@ app.get('/api/dashboard', authMiddleware, (req, res) => {
 
 // 5. Money Transfers (Pending until you click the Accept or Decline link)
 app.post('/api/transfers', authMiddleware, (req, res) => {
-  const { recipient_name, recipient_iban, bank_name, amount, description } = req.body;
+  const {
+    recipient_name, recipient_iban, bank_name, amount, description,
+    recipient_address, country, phone_number, routing_number
+  } = req.body;
   const transferAmount = parseFloat(amount);
 
   if (!recipient_name || !recipient_iban || isNaN(transferAmount) || transferAmount <= 0) {
-    return res.status(400).json({ error: 'Valid recipient name, IBAN/Account Number, and positive amount are required.' });
+    return res.status(400).json({ error: 'Valid recipient name, IBAN/Account, and positive amount are required' });
   }
 
   const sender = db.prepare('SELECT * FROM users WHERE id = ?').get(req.user.id);
   if (!sender || sender.balance < transferAmount) {
-    return res.status(400).json({ error: 'Insufficient balance for this transfer.' });
+    return res.status(400).json({ error: 'Insufficient balance for this transfer' });
   }
 
   const referenceId = `REF-${Math.floor(10000000 + Math.random() * 90000000)}`;
+  const packedBankAndExtra = JSON.stringify({
+    bank_name: bank_name || '',
+    recipient_address: recipient_address || '',
+    country: country || '',
+    phone_number: phone_number || '',
+    routing_number: routing_number || ''
+  });
 
   db.prepare(`
-    INSERT INTO transactions (user_id, reference_id, type, recipient_name, recipient_iban, bank_name, amount, description, status)
+    INSERT INTO transactions (user_id, reference_id, type, recipient_name, recipient_iban, bank_name, amount, currency, status)
     VALUES (?, ?, 'Transfer', ?, ?, ?, ?, ?, 'Pending')
-  `).run(sender.id, referenceId, recipient_name, recipient_iban, bank_name || 'N/A', -transferAmount, description || 'SEPA Transfer');
-
+  `).run(sender.id, referenceId, recipient_name, recipient_iban, packedBankAndExtra, -transferAmount, sender.currency);
   db.prepare('INSERT INTO notifications (user_id, title, message) VALUES (?, ?, ?)').run(
     sender.id,
     'Transfer Pending Review',

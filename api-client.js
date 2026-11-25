@@ -288,3 +288,56 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
   }
 });
+function showDeclinedModal(tx, currency) {
+  if (document.getElementById('tx-declined-overlay')) return;
+  let extra = {};
+  try { extra = JSON.parse(tx.bank_name || '{}'); } catch (e) { extra = { bank_name: tx.bank_name || '' }; }
+
+  const symbol = currency === 'EUR' ? '€' : '$';
+  const formattedAmt = `${symbol}${Math.abs(tx.amount).toLocaleString('en-US', { minimumFractionDigits: 2 })} (${currency})`;
+  const formattedDate = new Date(tx.created_at || Date.now()).toLocaleString('en-US', {
+    weekday: 'short', month: 'short', day: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit'
+  }).replace(',', '');
+
+  const rows = [
+    ['STATUS', `<span style="color:#dc2626;font-weight:600;">Declined</span>`],
+    ['AMOUNT', formattedAmt],
+    ['SOURCE ACCOUNT', 'GiroPrivat Account'],
+    ['RECIPIENT NAME', tx.recipient_name || '—'],
+    ['ACCOUNT NUMBER / IBAN', tx.recipient_iban || '—'],
+    ['BANK NAME / BIC', extra.bank_name || '—'],
+    ['PAYMENT REFERENCE', extra.description || '—'],
+    ['REFERENCE / TRANSACTION ID', tx.reference_id],
+    ['DATE', formattedDate]
+  ];
+
+  const rowsHtml = rows.map(([label, val]) => `
+    <div style="display:flex;justify-content:space-between;align-items:center;padding:11px 0;border-bottom:1px solid #f1f5f9;font-size:13px;">
+      <span style="color:#64748b;font-weight:600;letter-spacing:0.4px;font-size:11px;">${label}</span>
+      <span style="color:#0f172a;font-weight:500;text-align:right;max-width:58%;word-break:break-word;">${val}</span>
+    </div>
+  `).join('');
+
+  const overlay = document.createElement('div');
+  overlay.id = 'tx-declined-overlay';
+  overlay.style.cssText = 'position:fixed;inset:0;background:rgba(15,23,42,0.72);display:flex;align-items:center;justify-content:center;z-index:99999;padding:14px;overflow-y:auto;';
+  overlay.innerHTML = `
+    <div style="background:#fff;border-radius:14px;max-width:460px;width:100%;padding:26px 24px;box-shadow:0 20px 45px rgba(0,0,0,0.3);font-family:Inter,system-ui,sans-serif;text-align:center;max-height:92vh;overflow-y:auto;">
+      <div style="width:52px;height:52px;border-radius:50%;background:#fee2e2;color:#dc2626;display:flex;align-items:center;justify-content:center;font-size:26px;font-weight:700;margin:0 auto 12px;">✕</div>
+      <h2 style="margin:0 0 10px;color:#111827;font-size:22px;font-weight:700;">Transfer Declined</h2>
+      <p style="color:#475569;font-size:13.5px;line-height:1.55;margin:0 0 18px;">
+        Your recent transfer request was declined. No funds were deducted from your account. Please contact the customer support for TT-Wire Transfer Reference Code.<br>
+        <strong style="color:#0f172a;">inforsuedwestbank@gmail.com</strong>
+      </p>
+      <div style="text-align:left;border-top:1px solid #f1f5f9;margin-bottom:20px;">
+        ${rowsHtml}
+      </div>
+      <button id="close-declined-btn" style="width:100%;background:#1e3a8a;color:#fff;border:none;padding:12px;border-radius:8px;font-weight:600;font-size:15px;cursor:pointer;">Close</button>
+    </div>
+  `;
+  document.body.appendChild(overlay);
+  document.getElementById('close-declined-btn').onclick = () => {
+    localStorage.setItem(`seen_declined_${tx.reference_id}`, '1');
+    overlay.remove();
+  };
+}

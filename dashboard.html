@@ -117,40 +117,12 @@
   <footer class="site-footer" id="global-footer"></footer>
   <script src="script.js"></script>
   <script src="portal.js"></script>
+  <script src="api-client.js"></script>
   <script>
     document.addEventListener('DOMContentLoaded', async () => {
-      // 1. Immediately populate from localStorage so name/IBAN never show "Kunde"
+      if (typeof apiFetch !== 'function' || !getToken()) return;
       try {
-        const saved = JSON.parse(localStorage.getItem('swb_user'));
-        if (saved) {
-          const fullName = `${saved.first_name || ''} ${saved.last_name || ''}`.trim();
-          document.querySelectorAll('[data-user-name]').forEach(el => { if (fullName) el.textContent = fullName; });
-          document.querySelectorAll('[data-user-iban]').forEach(el => { if (saved.iban) el.textContent = saved.iban; });
-        }
-      } catch (e) {}
-
-      // 2. Fetch live balance, user details, and recent transactions from the server
-      const token = localStorage.getItem('swb_token');
-      if (!token) return;
-      try {
-        const res = await fetch('/api/dashboard', {
-          headers: { 'Authorization': `Bearer ${token}` }
-        });
-        if (!res.ok) return;
-        const { user, recentTransactions } = await res.json();
-
-        if (user) {
-          localStorage.setItem('swb_user', JSON.stringify(user));
-          const fullName = `${user.first_name || ''} ${user.last_name || ''}`.trim();
-          document.querySelectorAll('[data-user-name]').forEach(el => { if (fullName) el.textContent = fullName; });
-          document.querySelectorAll('[data-user-iban]').forEach(el => { if (user.iban) el.textContent = user.iban; });
-          document.querySelectorAll('[data-user-balance]').forEach(el => {
-            const formatted = `${user.currency || 'EUR'} ${Number(user.balance).toLocaleString('de-DE', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
-            el.textContent = formatted;
-            el.dataset.realBalance = formatted;
-          });
-        }
-
+        const { recentTransactions } = await apiFetch('/api/dashboard');
         const container = document.querySelector('[data-bind="transactionList"]');
         if (container && recentTransactions && recentTransactions.length > 0) {
           container.className = 'portal-table-scroll';
@@ -186,6 +158,6 @@
       }
     });
   </script>
-  
+  <script src="api-client.js"></script>
 </body>
 </html>
