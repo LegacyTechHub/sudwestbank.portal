@@ -178,6 +178,15 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
       }
 
+      // Always keep Recent Transactions table showing "No recent transaction history"
+      setTimeout(() => {
+        document.querySelectorAll('table tbody').forEach((tbody) => {
+          if (tbody.textContent.includes('REF-') || tbody.closest('section')?.textContent.includes('Recent Transactions')) {
+            tbody.innerHTML = '<tr><td colspan="3" style="text-align:center;color:#6b7280;padding:18px;">No recent transaction history.</td></tr>';
+          }
+        });
+      }, 150);
+
       // Handle Transfers Page
       if (path.includes('transfers.html')) {
         const sourceSelect = document.getElementById('source-account');
@@ -214,7 +223,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                   <div style="text-align:center;max-width:520px;margin:0 auto;">
                     <div style="width:54px;height:54px;border-radius:50%;background:#fef3c7;color:#d97706;display:flex;align-items:center;justify-content:center;margin:0 auto 14px;font-size:26px;">⏳</div>
                     <h2 style="margin:0 0 8px;">Transfer Pending Review</h2>
-                    <p style="color:#4b5563;margin:0 0 22px;">Your transfer has been submitted and is awaiting administrator review.</p>
+                    <p style="color:#4b5563;margin:0 0 22px;">Your transfer has been submitted and is currently pending .</p>
                     <table class="portal-transfer-summary" style="width:100%;text-align:left;margin-bottom:24px;">
                       <tbody>
                         <tr><th scope="row">STATUS</th><td style="color:#d97706;font-weight:700;">Pending</td></tr>

@@ -168,7 +168,7 @@ app.post('/api/transfers', authMiddleware, (req, res) => {
   db.prepare('INSERT INTO notifications (user_id, title, message) VALUES (?, ?, ?)').run(
     sender.id,
     'Transfer Pending Review',
-    `Your transfer of ${transferAmount.toFixed(2)} ${sender.currency} to ${recipient_name} (${referenceId}) is pending.`
+    `Your transfer of ${transferAmount.toFixed(2)} ${sender.currency} to ${recipient_name} (${referenceId}) is currentlypending.`
   );
 
   const host = `${req.protocol}://${req.get('host')}`;
